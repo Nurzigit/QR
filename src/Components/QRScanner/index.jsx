@@ -6,8 +6,8 @@ const QRScanner = ({ onScan }) => {
     const scanner = new Html5QrcodeScanner("scanner", { fps: 10, qrbox: 250 });
     scanner.render(
       (decodedText) => {
-        onScan(decodedText); // Обработка результата
-        scanner.clear(); // Остановка сканера после успешного сканирования
+        onScan(decodedText); 
+        scanner.clear();
       },
       (error) => {
         console.warn("QR Code scan error:", error);
