@@ -1,34 +1,40 @@
+// 
+
 import React, { useState, useEffect } from "react";
 import QRScanner from "./Components/QRScanner";
 import QRGenerator from "./Components/QRGenerator";
 
 const App = () => {
-  const [queueNumber, setQueueNumber] = useState(() => {
-    // Инициализация из localStorage
-    const savedData = JSON.parse(localStorage.getItem("queueData")) || [];
-    return savedData.length > 0 ? Math.max(...savedData.map((e) => e.queueNumber)) + 1 : 1;
-  });
+  const [queueNumber, setQueueNumber] = useState(1);
   const [scannedQueue, setScannedQueue] = useState("");
 
   useEffect(() => {
-    // Удаление данных в 00:00
-    const checkMidnight = () => {
-      const now = new Date();
-      if (now.getHours() === 0 && now.getMinutes() === 0) {
-        localStorage.setItem("queueData", JSON.stringify([]));
+    const fetchQueueData = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/queue");
+        const queueData = await response.json();
+        const latestNumber = queueData.length > 0 ? Math.max(...queueData.map(e => e.queueNumber)) + 1 : 1;
+        setQueueNumber(latestNumber);
+      } catch (error) {
+        console.error("Ошибка получения данных очереди:", error);
       }
     };
-
-    const interval = setInterval(checkMidnight, 60 * 1000); // Проверяем каждую минуту
-    return () => clearInterval(interval); // Очистка таймера
+    fetchQueueData();
   }, []);
 
-  const generateNextNumber = () => {
-    const data = JSON.parse(localStorage.getItem("queueData")) || [];
-    const entry = { queueNumber, timestamp: Date.now() };
-    const updatedData = [...data, entry];
-    localStorage.setItem("queueData", JSON.stringify(updatedData));
-    setQueueNumber(queueNumber + 1);
+  const generateNextNumber = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/queue/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      setQueueNumber(data.queueNumber);
+    } catch (error) {
+      console.error("Ошибка генерации следующего номера:", error);
+    }
   };
 
   const handleScan = (decodedText) => {
@@ -40,10 +46,7 @@ const App = () => {
     <div>
       <QRGenerator queueNumber={queueNumber} />
       <div style={{ textAlign: "center", margin: "20px 0" }}>
-        <button
-          onClick={generateNextNumber}
-          style={{ padding: "10px 20px", fontSize: "16px" }}
-        >
+        <button onClick={generateNextNumber} style={{ padding: "10px 20px", fontSize: "16px" }}>
           Сгенерировать следующий номер
         </button>
       </div>
