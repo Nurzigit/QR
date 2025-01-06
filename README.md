@@ -1,70 +1,122 @@
-# Getting Started with Create React App
+# Система управления электронной очередью
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Это **система управления очередью в реальном времени**, созданная с использованием **React** (для фронтенда) и **Node.js** (для бэкенда). Она позволяет пользователям занимать очередь, генерируя QR-код, который можно сканировать для получения номера в очереди. Менеджер может вызывать следующего пользователя в очереди, удаляя его из списка, а также видеть обновленный список оставшихся номеров в реальном времени.
 
-## Available Scripts
+## Особенности
 
-In the project directory, you can run:
+- **Генерация QR-кода**: Автоматическая генерация QR-кода для номера очереди.
+- **Сканирование QR-кода**: Пользователи могут сканировать сгенерированный QR-код для получения номера очереди.
+- **Реальное обновление**: Очередь обновляется в реальном времени как для пользователей, так и для менеджеров с использованием WebSocket.
+- **Панель менеджера**: Менеджеры могут вызывать следующего пользователя в очереди и видеть список оставшихся номеров.
+- **Сохранение данных**: Используется файл JSON для хранения данных очереди, который обновляется на сервере.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Структура проекта
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+/backend # Бэкенд API на Express.js /node_modules # Модули Node.js server.js # Точка входа в сервер, маршруты API и логика WebSocket Data.json # Файл, в котором хранятся данные очереди
 
-### `npm test`
+/frontend # Фронтенд на React /src
+/Components # Компоненты UI для генерации и сканирования QR, а также для панель менеджера App.js # Основная точка входа React приложения index.js # Точка входа для рендеринга React ...
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Используемые технологии
 
-### `npm run build`
+- **Фронтенд**: React, HTML5 Qrcode, WebSocket, CSS
+- **Бэкенд**: Node.js, Express.js, fs (File System API), Cors
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Установка и настройка
 
-### `npm run eject`
+### Шаг 1: Клонируйте репозиторий
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+git clone https://github.com/yourusername/electronic-queue-management.git
+cd electronic-queue-management
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Шаг 2: Установите зависимости
+Перейдите в папки frontend и backend, затем установите необходимые пакеты.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Фронтенд (React):
 
-## Learn More
+Перейдите в папку frontend/:
+cd frontend
+Установите зависимости:
+npm install
+Бэкенд (Node.js):
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Перейдите в папку backend/:
+cd backend
+Установите зависимости:
+npm install
+Запуск приложения
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Шаг 1: Запустите сервер бэкенда
+Запустите сервер Express, который будет работать с API и WebSocket:
 
-### Code Splitting
+cd backend
+node server.js
+Сервер будет доступен по адресу http://localhost:3001.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Шаг 2: Запустите фронтенд (React)
+Запустите React приложение:
 
-### Analyzing the Bundle Size
+cd frontend
+npm start
+Приложение будет доступно по адресу http://localhost:3000 в вашем браузере.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Использование
 
-### Making a Progressive Web App
+Пользователь
+Перейдите на главную страницу.
+Нажмите кнопку Сгенерировать следующий номер очереди, чтобы сгенерировать QR-код с текущим номером.
+Откройте сканер, отсканируйте ваш QR-код, чтобы увидеть ваш номер очереди.
+Менеджер
+Менеджеры могут видеть Список очередей с номерами клиентов.
+Нажмите Вызвать следующий номер, чтобы удалить первого клиента из очереди и вызвать следующего.
+Очередь будет обновляться в реальном времени как для пользователей, так и для менеджеров.
+WebSocket для обновления в реальном времени
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Очередь обновляется в реальном времени с помощью WebSocket. Когда менеджер вызывает следующий номер, очередь обновляется на всех активных клиентах (как пользователей, так и менеджеров) мгновенно. Это гарантирует синхронизацию без необходимости вручную обновлять страницу.
 
-### Advanced Configuration
+Чтобы WebSocket работал, необходимо одновременно запускать фронтенд и бэкенд.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Маршруты API
 
-### Deployment
+API маршруты бэкенда
+GET /api/queue: Получить текущие данные очереди (список всех номеров).
+POST /api/queue/generate: Генерировать новый номер очереди и вернуть его.
+POST /api/queue/callNext: Удалить первый номер из очереди и вернуть его (вызывается менеджером).
+Кастомизация кода и вклад
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Вы можете модифицировать и расширять проект по своему усмотрению! Будем рады увидеть ваши улучшения и предложения.
 
-### `npm run build` fails to minify
+Известные проблемы
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+На данный момент проблем нет.
+Лицензия
+
+Проект распространяется под лицензией NARXOZ и NURZHIGIT. См. LICENSE для получения дополнительной информации.
+
+Благодарности
+
+Спасибо QR Code React за компонент генерации QR-кодов.
+Большое спасибо HTML5 QR Code Scanner за отличную библиотеку для сканирования QR-кодов.
+
+
+---
+
+### Основные разделы в README:
+
+1. **Описание проекта**: Краткое описание функционала и особенностей проекта.
+2. **Используемые технологии**: Перечень технологий, использованных в проекте.
+3. **Установка и настройка**: Пошаговые инструкции для установки и запуска приложения.
+4. **Инструкция по использованию**: Детализированные шаги для **пользователей** и **менеджеров**.
+6. **API документация**: Описание API маршрутов.
+7. **Кастомизация и вклад**: Открытость для изменений и улучшений кода.
+8. **Лицензия**: Указание лицензии на проект.
+9. **Благодарности**: Ссылки на библиотеки и ресурсы, использованные в проекте.
+
+Если нужно что-то дополнить или изменить в README, дай знать!
