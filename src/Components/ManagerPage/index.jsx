@@ -1,27 +1,14 @@
 import React, { useState, useEffect } from "react";
 
-const Manager = () => {
-  const [queueList, setQueueList] = useState([]);
+const Manager = ({ queueList, setQueueList, removeQueueItem }) => {
   const [currentQueue, setCurrentQueue] = useState(null);
   const [missedQueue, setMissedQueue] = useState([]);
-  useEffect(() => {
-    const fetchQueueData = async () => {
-      try {
-        const response = await fetch("http://localhost:3001/api/queue");
-        const data = await response.json();
-        setQueueList(data);
-      } catch (error) {
-        console.error("Ошибка получения данных очереди:", error);
-      }
-    };
-    fetchQueueData();
-  }, []);
 
   const callNext = () => {
     if (queueList.length > 0) {
-      const nextQueue = queueList.shift();
+      const nextQueue = queueList[0]; // Получаем первый элемент
       setCurrentQueue(nextQueue);
-      setQueueList([...queueList]);
+      removeQueueItem(nextQueue.queueNumber); // Удаляем номер из списка очереди
     } else {
       alert("В очереди нет номеров");
     }

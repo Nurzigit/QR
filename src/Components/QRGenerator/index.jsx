@@ -9,6 +9,8 @@ const QRGenerator = ({ queueNumber, generateNextNumber }) => (
         <button onClick={generateNextNumber} style={{ padding: "10px 20px", fontSize: "16px" }}>
           Сгенерировать следующий номер
         </button>
+
+        <h1>{queueNumber}</h1>
       </div>
   </div>
 );

@@ -1,21 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-const QrList = () => {
-  const [queueList, setQueueList] = useState([]);
-
-  useEffect(() => {
-    const fetchQueueData = async () => {
-      try {
-        const response = await fetch("http://localhost:3001/api/queue");
-        const data = await response.json();
-        setQueueList(data);
-      } catch (error) {
-        console.error("Ошибка получения данных очереди:", error);
-      }
-    };
-    fetchQueueData();
-  }, []);
-
+const QrList = ({ queueList }) => {
   return (
     <div className="list">
       <h3>Список очередей</h3>
