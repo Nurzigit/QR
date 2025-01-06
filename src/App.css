@@ -1,0 +1,65 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+}
+
+
+/* Header */
+
+.header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 60px;
+}
+
+.logo {
+    font-size: 30px;
+    color: black;
+}
+
+.logo:hover {
+    transition: all .5s;
+    color: grey;
+}
+
+.header__links {
+    display: flex;
+    gap: 30px;
+}
+
+.link {
+    font-size: 20px;
+    color: black;
+}
+
+.link:hover {
+    transition: all .5s;
+    color: grey;
+}
+
+.active {
+    color: grey;
+}
+
+/* Page Not Find */
+
+.PageNotFind {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100svh;
+}
+
+
+/* All List */
+
+.list {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+

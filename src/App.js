@@ -1,8 +1,11 @@
-// 
-
 import React, { useState, useEffect } from "react";
 import QRScanner from "./Components/QRScanner";
 import QRGenerator from "./Components/QRGenerator";
+import QrList from './Components/QrList'
+import Header from "./Components/Header";
+import Manager from "./Components/ManagerPage";
+import { Route, Routes, Link } from "react-router-dom";
+import "./App.css";
 
 const App = () => {
   const [queueNumber, setQueueNumber] = useState(1);
@@ -13,7 +16,10 @@ const App = () => {
       try {
         const response = await fetch("http://localhost:3001/api/queue");
         const queueData = await response.json();
-        const latestNumber = queueData.length > 0 ? Math.max(...queueData.map(e => e.queueNumber)) + 1 : 1;
+        const latestNumber =
+          queueData.length > 0
+            ? Math.max(...queueData.map((e) => e.queueNumber)) + 1
+            : 1;
         setQueueNumber(latestNumber);
       } catch (error) {
         console.error("Ошибка получения данных очереди:", error);
@@ -44,18 +50,27 @@ const App = () => {
 
   return (
     <div>
-      <QRGenerator queueNumber={queueNumber} />
-      <div style={{ textAlign: "center", margin: "20px 0" }}>
-        <button onClick={generateNextNumber} style={{ padding: "10px 20px", fontSize: "16px" }}>
-          Сгенерировать следующий номер
-        </button>
-      </div>
-      <QRScanner onScan={handleScan} />
-      {scannedQueue && (
-        <p style={{ textAlign: "center", fontSize: "18px" }}>
-          Вы сканировали номер: {scannedQueue}
-        </p>
-      )}
+      <Header />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <QRGenerator
+              queueNumber={queueNumber}
+              generateNextNumber={generateNextNumber}
+            />
+          }
+        />
+        <Route
+          path="/scanner"
+          element={
+            <QRScanner onScan={handleScan} scannedQueue={scannedQueue} />
+          }
+        />
+        <Route path="/list" element={<QrList />} />
+        <Route path="/manage" element={<Manager />} />
+        <Route path="*" element={<h1 className="PageNotFind">Page Not Found</h1>} />
+      </Routes>
     </div>
   );
 };
